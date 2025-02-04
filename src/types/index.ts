@@ -5,43 +5,42 @@ export type CategoryType =
 	| 'other'
 	| 'button';
 
-// Продукт
-export interface IItem {
-	name: string;
-	id?: string;
-	type: CategoryType;
-	info?: string;
-	imageUrl: string;
-	price: number | null;
-	buttonName?: string;
+//товар
+export interface IProduct {
+    id?: string;
+    name: string;
+    price: number | null;
+    description?: string;
+    category: CategoryType;
+    image: string;
 }
 
 // Карточка продукта
-export interface IItemCard {
+export interface IProductCard {
 	price: number | null;
 	type: CategoryType;
-	imageUrl: string;
+	image: string;
 	name: string;
-	info: string;
+	description: string;
 	buttonName: string;
 }
 
 // Состояние приложения
 export interface IApplicationState {
-	itemList: IItem[];
-	cart: IItem[];
+	itemList: IProduct[];
+	cart: IProduct[];
 	isCartEmpty(): boolean;
-	initializeItems(items: IItem[]): void;
+	initializeItems(items: IProduct[]): void;
 	calculateTotalPrice(): number;
-	addToCart(item: IItem): void;
-	removeFromCart(item: IItem): void;
+	addToCart(item: IProduct): void;
+	removeFromCart(item: IProduct): void;
 	submitOrder(): void;
 	clearCart(): void;
-	getItemsInCart(): IItem[];
-	findCartItemIndex(item: IItem): number;
+	getItemsInCart(): IProduct[];
+	findCartItemIndex(item: IProduct): number;
 	updatePaymentMethod(method: string): void;
 	updateDeliveryAddress(address: string): void;
-	setPreviewItem(item: IItem): void;
+	setPreviewItem(item: IProduct): void;
 	updateOrderField(
 		field: keyof Pick<
 			IOrderDetails,
