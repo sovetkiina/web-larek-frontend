@@ -28,23 +28,23 @@ export interface IProductCard {
 // Состояние приложения
 export interface IApplicationState {
 	itemList: IProduct[];
-	cart: IProduct[];
-	isCartEmpty(): boolean;
+	basket: IProduct[];
+	isBasketEmpty(): boolean;
 	initializeItems(items: IProduct[]): void;
-	calculateTotalPrice(): number;
-	addToCart(item: IProduct): void;
-	removeFromCart(item: IProduct): void;
-	submitOrder(): void;
-	clearCart(): void;
-	getItemsInCart(): IProduct[];
-	findCartItemIndex(item: IProduct): number;
-	updatePaymentMethod(method: string): void;
-	updateDeliveryAddress(address: string): void;
+	totalPrice(): number;
+	addBasket(item: IProduct): void;
+	removeBasket(item: IProduct): void;
+	prepareOrder(): void;
+	clearBasket(): void;
+	getItemsInBasket(): IProduct[];
+	findBasketItemIndex(item: IProduct): number;
+	updatePayment(method: string): void;
+	updateAddress(address: string): void;
 	setPreviewItem(item: IProduct): void;
 	updateOrderField(
 		field: keyof Pick<
 			IOrderDetails,
-			'deliveryAddress' | 'contactNumber' | 'email'
+			'address' | 'contactNumber' | 'email'
 		>,
 		value: string
 	): void;
@@ -60,8 +60,8 @@ export interface IFormStructure<T> {
 
 // Окно заказа
 export interface IDeliveryDetails {
-	paymentMethod: string;
-	deliveryAddress: string;
+	payment: string;
+	address: string;
 	addPaymentOption(option: HTMLElement): void;
 	removePaymentOption(): void;
 }
