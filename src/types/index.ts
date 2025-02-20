@@ -13,14 +13,15 @@ export interface IProduct {
     description?: string;
     category: CategoryType;
     image: string;
+	buttonName: string;
 }
 
 // Карточка продукта
 export interface IProductCard {
 	price: number | null;
-	type: CategoryType;
+	category: CategoryType;
 	image: string;
-	name: string;
+	title: string;
 	description: string;
 	buttonName: string;
 }
@@ -38,10 +39,10 @@ export interface IApplicationState {
 	clearBasket(): void;
 	getItemsInBasket(): IProduct[];
 	findBasketItemIndex(item: IProduct): number;
-	updatePayment(method: string): void;
-	updateAddress(address: string): void;
+	setPayment(method: string): void;
+	setAddress(address: string): void;
 	setPreviewItem(item: IProduct): void;
-	updateOrderField(
+	setOrderField(
 		field: keyof Pick<
 			IOrderDetails,
 			'address' | 'contactNumber' | 'email'
@@ -62,18 +63,20 @@ export interface IFormStructure<T> {
 export interface IDeliveryDetails {
 	payment: string;
 	address: string;
-	addPaymentOption(option: HTMLElement): void;
-	removePaymentOption(): void;
+	addPayment?(value: HTMLElement): void;
+	removePayment?(): void;
 }
 
 // Контактная информация
-export interface IContactInfo {
+export interface IContactDetails {
 	email: string;
 	contactNumber: string;
+	valid?: boolean;
+	errors?: string;
 }
 
 // Заказ
-export interface IOrderDetails extends IDeliveryDetails, IContactInfo {}
+export interface IOrderDetails extends IDeliveryDetails, IContactDetails {}
 
 // Ошибки валидации формы
 export type IFormValidationErrors = Partial<
@@ -81,9 +84,9 @@ export type IFormValidationErrors = Partial<
 >;
 
 // Корзина
-export interface IStoreCart {
-	items: HTMLElement[];
-	totalPrice: number;
+export interface IBasket {
+	products: HTMLElement[];
+	totalCost: number;
 }
 
 // Успешное оформление заказа
@@ -98,20 +101,21 @@ export interface ICardActions {
 
 // Окно успешного заказа
 export interface IConfirmationModalActions {
-	close(): void;
+	Click: () => void;
 }
 
 // Главная страница
 export interface IHomePage {
 	productCatalog: HTMLElement[];
 	itemCount: number;
-	isLocked: boolean;
+	locked: boolean;
 }
 
 // Ответ от сервера после создания заказа
 export interface IOrderResponse {
 	orderId: string;
 	orderTotal: number;
+	Click?: () => void; 
 }
 
 // Модальное окно

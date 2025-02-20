@@ -83,11 +83,11 @@ export class DataStore implements IApplicationState {
 		return this.basket.indexOf(product) + 1;
 	}
 
-	updatePayment(value: string) {
+	setPayment(value: string) {
 		if (this.order.payment !== value) this.order.payment = value;
 	}
 
-	updateAddress(value: string) {
+	setAddress(value: string) {
 		this.order.address = value;
 	}
 
@@ -96,7 +96,7 @@ export class DataStore implements IApplicationState {
 		this.notify('preview:changed', product);
 	}
 
-	updateOrderField(
+	setOrderField(
 		field: keyof Pick<IOrderDetails, 'address' | 'contactNumber' | 'email'>,
 		value: string
 	) {
