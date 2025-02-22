@@ -1,14 +1,14 @@
 export type CategoryType =
-	| 'soft-skill'
-	| 'hard-skill'
-	| 'additional'
-	| 'other'
-	| 'button';
+	| 'софт-скил'
+	| 'хард-скил'
+	| 'дополнительное'
+	| 'другое'
+	| 'кнопка';
 
 //товар
 export interface IProduct {
     id?: string;
-    name: string;
+    title: string;
     price: number | null;
     description?: string;
     category: CategoryType;
@@ -45,7 +45,7 @@ export interface IApplicationState {
 	setOrderField(
 		field: keyof Pick<
 			IOrderDetails,
-			'address' | 'contactNumber' | 'email'
+			'address' | 'phone' | 'email'
 		>,
 		value: string
 	): void;
@@ -70,7 +70,7 @@ export interface IDeliveryDetails {
 // Контактная информация
 export interface IContactDetails {
 	email: string;
-	contactNumber: string;
+	phone: string;
 	valid?: boolean;
 	errors?: string;
 }

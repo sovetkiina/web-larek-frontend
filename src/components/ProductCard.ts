@@ -3,11 +3,11 @@ import { ensureElement } from '../utils/utils';
 import { CategoryType, IProduct, IProductCard, ICardActions } from '../types';
 
 const CategoryList: Map<string, string> = new Map([
-	['hard-skill', 'card__category_hard'],
-	['soft-skill', 'card__category_soft'],
-	['additional', 'card__category_additional'],
-	['other', 'card__category_other'],
-	['button', 'card__category_button'],
+	['хард-скил', 'card__category_hard'],
+	['софт-скил', 'card__category_soft'],
+	['дополнительное', 'card__category_additional'],
+	['другое', 'card__category_other'],
+	['кнопка', 'card__category_button'],
 ]);
 
 export class ProductCard extends Component<IProduct> implements IProductCard {
@@ -46,19 +46,32 @@ export class ProductCard extends Component<IProduct> implements IProductCard {
 	}
 
 	set category(text: CategoryType) {
+		if (!this._category) return;
+
+		// Проверяем, есть ли такая категория в списке
+		if (!CategoryList.has(text)) {
+			text = 'другое'; //в категорию "другое" по умолчанию
+		}
+		// Получаем нужный класс из CategoryList
+		const categoryClass = CategoryList.get(text) || 'card__category_other';
+
+		// заменяем className, оставляя базовый класс + нужный класс категории
+		this._category.className = `card__category ${categoryClass}`;
+
+		// Устанавливаем текст категории
 		this.setText(this._category, text);
-		this.toggleClass(this._category, CategoryList.get(text), true);
 	}
 
 	set image(link: string) {
 		this.setImage(this._image, link, this.title);
 	}
 
-	set title(text: string) {
-		this.setText(this._title, text);
+	set title(title: string) {
+		this.setText(this._title, title);
 	}
 
 	set description(text: string) {
+		
 		this.setText(this._text, text);
 	}
 

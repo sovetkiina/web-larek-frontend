@@ -21,11 +21,13 @@ export class Form<T> extends Component<IFormStructure<T>> {
 			this.container
 		);
 		this.submitButtonElement.disabled = true;
+
 		// Элемент для вывода сообщений об ошибках
 		this.errorMessagesElement = ensureElement<HTMLElement>(
 			'.form__errors',
 			this.container
 		);
+
 		// Обработчик отправки формы
 		this.container.addEventListener('submit', (evt: Event) => {
 			evt.preventDefault();
@@ -43,6 +45,17 @@ export class Form<T> extends Component<IFormStructure<T>> {
 
 	protected inputChange(field: keyof T, value: string) {
 		this.events.emit(`order:change`, { field, value });
+
+		// Получаем список всех полей формы
+		const inputs = this.container.querySelectorAll('input');
+
+		// Проверяем, все ли поля заполнены
+		const allFieldsValid = Array.from(inputs).every(
+			(input) => input.value.trim() !== ''
+		);
+
+		// Устанавливаем валидность формы
+		this.valid = allFieldsValid;
 	}
 
 	render(
@@ -52,5 +65,12 @@ export class Form<T> extends Component<IFormStructure<T>> {
 		super.render({ errorMessages, isValid });
 		Object.assign(this, inputs);
 		return this.container;
+	}
+
+	resetForm() {
+		const inputs = this.container.querySelectorAll('input');
+		inputs.forEach((input) => (input.value = ''));
+		this.errors = '';
+		this.valid = false;
 	}
 }

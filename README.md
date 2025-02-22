@@ -132,6 +132,7 @@ interface IProduct {
 * set valid(value: boolean) - устанавливает состояние кнопки отправки формы.
 * set errors(value: string) - устанавливает текст ошибок.
 * render( state: Partial<T> & Pick<IFormStructure<T> ) - отображает состояние формы, включая ошибки и валидность, а также обновляет значения полей ввода.
+* resetForm() - Метод сбрасывает форму в её начальное состояние.
 * protected inputChange(field: keyof T, value: string):void - обработа изменения значения поля формы.
 
 #### DeliveryForm

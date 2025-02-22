@@ -59,9 +59,10 @@ events.on('items:create', () => {
 				events.emit('card:select', item);
 			},
 		});
+
 		return cardTemplate.render({
 			id: item.id,
-			name: item.name,
+			title: item.title,
 			price: item.price,
 			description: item.description,
 			category: item.category,
@@ -87,7 +88,7 @@ events.on('preview:changed', (product: IProduct) => {
 	modal.renderContent({
 		content: card.render({
 			id: product.id,
-			name: product.name,
+			title: product.title,
 			description: product.description,
 			category: product.category,
 			image: product.image,
@@ -120,7 +121,7 @@ events.on('basket:changed', () => {
 		basketItem.index = appState.findBasketItemIndex(product);
 
 		return basketItem.render({
-			name: product.name,
+			title: product.title,
 			price: product.price,
 		});
 	});
@@ -139,6 +140,7 @@ events.on('product:delete', (product: IProduct) => {
 
 // Модальное окно заказа
 events.on('order:open', () => {
+	delivery.resetForm();
 	modal.render({
 		content: delivery.render({
 			address: '',
@@ -147,6 +149,8 @@ events.on('order:open', () => {
 			isValid: false,
 		}),
 	});
+
+	delivery.removePayment();
 });
 
 // Модальное окно контактной информации
@@ -155,7 +159,7 @@ events.on('order:submit', () => {
 	modal.render({
 		content: contacts.render({
 			email: '',
-			contactNumber: '',
+			phone: '',
 			isValid: false,
 			errorMessages: '',
 		}),
@@ -165,15 +169,16 @@ events.on('order:submit', () => {
 
 // Запуск валидации
 events.on('formErrors:change', (errors: Partial<IOrderDetails>) => {
-	const { email, contactNumber, address, payment } = errors;
+	console.log('Errors:', errors);
+	const { email, phone, address, payment } = errors;
 	// Проверка валидности полей
 	delivery.valid = !(address && !payment);
-	contacts.valid = !(email && !contactNumber);
+	contacts.valid = !(email && !phone);
 	// Обновление ошибок
 	delivery.errors = Object.values({ address, payment })
 		.filter((i) => !!i)
 		.join('. ');
-	contacts.errors = Object.values({ contactNumber, email })
+	contacts.errors = Object.values({ phone, email })
 		.filter((i) => !!i)
 		.join('. ');
 });
@@ -192,7 +197,7 @@ events.on(
 events.on(
 	'order:change',
 	(data: {
-		field: keyof Pick<IOrderDetails, 'address' | 'contactNumber' | 'email'>;
+		field: keyof Pick<IOrderDetails, 'address' | 'phone' | 'email'>;
 		value: string;
 	}) => {
 		appState.setOrderField(data.field, data.value);
@@ -203,7 +208,7 @@ events.on(
 events.on(
 	'contacts:change',
 	(data: {
-		field: keyof Pick<IOrderDetails, 'address' | 'contactNumber' | 'email'>;
+		field: keyof Pick<IOrderDetails, 'address' | 'phone' | 'email'>;
 		value: string;
 	}) => {
 		appState.setOrderField(data.field, data.value);
@@ -222,7 +227,14 @@ events.on('contacts:submit', () => {
 			appState.clearBasket();
 		})
 		.catch((error) => {
-			console.error(error);
+			console.error('Ошибка при отправке заказа:', error);
+			if (error.response) {
+				console.error('Ответ от сервера:', error.response);
+			} else if (error.request) {
+				console.error('Запрос не был отправлен:', error.request);
+			} else {
+				console.error('Ошибка в настройках запроса:', error.message);
+			}
 		});
 });
 

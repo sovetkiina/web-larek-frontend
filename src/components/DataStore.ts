@@ -14,7 +14,7 @@ export class DataStore implements IApplicationState {
 	protected order: IOrderDetails = {
 		payment: '',
 		address: '',
-		contactNumber: '',
+		phone: '',
 		email: '',
 	};
 
@@ -63,7 +63,7 @@ export class DataStore implements IApplicationState {
 	clearBasket() {
 		this.order = {
 			email: '',
-			contactNumber: '',
+			phone: '',
 			payment: '',
 			address: '',
 		};
@@ -97,7 +97,7 @@ export class DataStore implements IApplicationState {
 	}
 
 	setOrderField(
-		field: keyof Pick<IOrderDetails, 'address' | 'contactNumber' | 'email'>,
+		field: keyof Pick<IOrderDetails, 'address' | 'phone' | 'email'>,
 		value: string
 	) {
 		this.order[field] = value;
@@ -106,12 +106,13 @@ export class DataStore implements IApplicationState {
 
 	validateOrder() {
 		const errors: typeof this.formErrors = {};
+
 		if (!this.order.email) {
 			errors.email = 'Необходимо указать email';
 		}
 
-		if (!this.order.contactNumber) {
-			errors.contactNumber = 'Необходимо указать телефон';
+		if (!this.order.phone) {
+			errors.phone = 'Необходимо указать телефон';
 		}
 
 		if (!this.order.address) {
@@ -124,6 +125,7 @@ export class DataStore implements IApplicationState {
 
 		this.formErrors = errors;
 		this.events.emit('formErrors:change', this.formErrors);
+
 		return Object.keys(errors).length === 0;
 	}
 }

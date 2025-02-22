@@ -13,7 +13,7 @@ export class ContactForm
 		(this.container.elements.namedItem('email') as HTMLInputElement).value =
 			text;
 	}
-	set contactNumber(value: string) {
+	set phone (value: string) {
 		(this.container.elements.namedItem('phone') as HTMLInputElement).value =
 			value;
 	}
